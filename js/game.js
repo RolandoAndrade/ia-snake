@@ -16,7 +16,7 @@ class Game
         let game = this;
         document.addEventListener("keydown", function (e)
         {
-            if(e.keyCode === 32 && game.gameOver)
+            if((e.keyCode === 32 || e.keyCode === 13) && game.gameOver)
             {
                 game.init();
             }
