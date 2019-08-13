@@ -116,6 +116,12 @@ class Snake
 {
     constructor()
     {
+        this.reset();
+        this.brain = new NeuronalNetwork(TOPOLOGY,new Sigmoid());
+    }
+
+    reset()
+    {
         this.snake = [];
         this.alive = true;
         for (let i = 0; i < 5; i++)
@@ -125,15 +131,14 @@ class Snake
         this.q1=1;
         this.q2=2;
         this.q3=3;
-        this.brain = new NeuronalNetwork(TOPOLOGY,new Sigmoid());
     }
 
-    draw()
+    draw(draw = true)
     {
         this.snake[0].move();
         for (let i = 0; i < this.snake.length; i++)
         {
-            this.snake[i].draw();
+            if(draw) this.snake[i].draw();
             try
             {
                 this.snake[i + 1].forward(this.snake[i]);

@@ -13,20 +13,29 @@ class Game
         this.gameOver = true;
         this.background = new Rectangle(0,0,400,400, "#424242");
         this.background.draw();
-        let game = this;
+        this.init();
+        let a = this;
         document.addEventListener("keydown", function (e)
         {
-            if((e.keyCode === 32 || e.keyCode === 13) && game.gameOver)
-            {
-                game.init();
-            }
-        })
+            a.reset();
+        });
+    }
+
+    reset()
+    {
+        //next generation
+        console.log("next");
     }
 
     init()
     {
-        this.snake = new Snake();
-        this.food = new Food(this.snake);
+        this.snakes = [];
+        for(let i = 0; i < POPULATION; i++)
+        {
+            this.snakes.push(new Snake());
+        }
+        //this.snake = new Snake();
+        this.food = new Food(this.snakes[0]);
         this.score = new Score();
         this.gameOver = false;
     }
@@ -37,14 +46,15 @@ class Game
         {
             this.background.draw();
             this.score.draw();
-            this.snake.think(this.food);
-            this.snake.draw();
-            if(this.food.got())
+            this.snakes[0].think(this.food);
+            this.snakes[0].draw();
+
+            if(this.food.got(this.snakes[0]))
             {
                 this.score.add();
             }
             this.food.draw();
-            this.gameOver = !this.snake.alive;
+            this.gameOver = !this.snakes[0].alive;
         }
         else
         {

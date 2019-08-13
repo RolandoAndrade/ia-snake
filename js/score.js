@@ -3,13 +3,12 @@ class Food extends Rectangle
     constructor(snake)
     {
         super(0, 0, SQUARE_WIDTH, SQUARE_WIDTH, "#ff406e");
-        this.snake = snake;
-        this.generate();
+        this.generate(snake);
     }
 
-    generate()
+    generate(snaky)
     {
-        let snake = this.snake.snake;
+        let snake = snaky.snake;
         while (true)
         {
             this.x = (Math.floor(Math.floor(Math.random() * 400) / 20)) * 20;
@@ -26,12 +25,12 @@ class Food extends Rectangle
         }
     }
 
-    got()
+    got(snake)
     {
-        if (this.snake.snake[0].collision(this))
+        if (snake.snake[0].collision(this))
         {
-            this.snake.growUp();
-            this.generate();
+            snake.growUp();
+            this.generate(snake);
             return true;
         }
         return false;
