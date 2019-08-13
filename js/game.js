@@ -47,12 +47,7 @@ class Game
         }
         else
         {
-            ctx.textAlign = "center";
-            ctx.font ='50px Arial, sans-serif';
-            ctx.fillStyle="#fff13d";
-            ctx.fillText("GAME OVER",200,200);
-            ctx.font ='15px Arial, sans-serif';
-            ctx.fillText("Presiona ENTER para empezar",200,250);
+            game.init();
         }
     }
 }
