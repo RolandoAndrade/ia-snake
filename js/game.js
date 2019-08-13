@@ -23,20 +23,27 @@ class Game
 
     reset()
     {
-        //next generation
-        console.log("next");
+        this.gameOver = true;
+        this.family.nextGeneration();
+        this.gameOver = false;
     }
 
     init()
     {
         this.snakes = [];
+        this.food = [];
+        this.scores = [];
+        this.drawed = 0;
+
+        this.family = new Generation(this.snakes);
+
+
         for(let i = 0; i < POPULATION; i++)
         {
             this.snakes.push(new Snake());
+            this.food.push(new Food(this.snakes[i]));
+            this.scores.push(new Score());
         }
-        //this.snake = new Snake();
-        this.food = new Food(this.snakes[0]);
-        this.score = new Score();
         this.gameOver = false;
     }
 
@@ -45,20 +52,38 @@ class Game
         if(!this.gameOver)
         {
             this.background.draw();
-            this.score.draw();
-            this.snakes[0].think(this.food);
-            this.snakes[0].draw();
-
-            if(this.food.got(this.snakes[0]))
+            this.scores[this.drawed].draw();
+            this.drawed = -1;
+            this.snakes.forEach((e,i)=>
             {
-                this.score.add();
+                if(e.alive)
+                {
+                    this.snakes[i].think(this.food[i]);
+                    this.snakes.draw(this.drawed===-1);
+                    this.drawed = i;
+                }
+            });
+            if(this.drawed!==-1)
+            {
+                this.food.forEach((e,i)=>
+                {
+                    if(e.got(this.snakes[i]))
+                    {
+                        this.scores[i].add();
+                    }
+                });
+                this.food[this.drawed].draw();
             }
-            this.food.draw();
-            this.gameOver = !this.snakes[0].alive;
+            else
+            {
+                this.gameOver = true;
+            }
+
+
         }
         else
         {
-            game.init();
+            game.reset();
         }
     }
 }
@@ -71,4 +96,4 @@ function loop()
     game.loop();
 }
 
-let interval = window.setInterval(loop,100);
+let interval = window.setInterval(loop,20);
