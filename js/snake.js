@@ -1,3 +1,29 @@
+const TOPOLOGY = [17,9,9,4,1];
+
+/*
+* Descripción del cerebro
+*
+* Capa de entrada:
+*
+* 1. X de la cabeza
+* 2. Y de la cabeza
+* 3. X del primer cuartil del cuerpo
+* 4. Y del primer cuartil del cuerpo
+* 5. X de la mitad del cuerpo
+* 6. Y de la mitad del cuerpo
+* 7. X del tercer cuartil del cuerpo
+* 8. Y del tercer cuartil del cuerpo
+* 9. X del final del cuerpo
+* 10. Y del final del cuerpo
+* 11. X de la comida
+* 12. Y de la comida
+* 13. Se dirige a la derecha
+* 14. Se dirige a abajo
+* 15. Se dirige a la izquierda
+* 16. Se dirige a arriba
+* 17. Tamaño actual
+* */
+
 class Body extends Rectangle
 {
     constructor(x, y, vx, vy)
@@ -86,30 +112,6 @@ class Body extends Rectangle
     }
 }
 
-/*
-* Descripción del cerebro
-*
-* Capa de entrada:
-*
-* 1. X de la cabeza
-* 2. Y de la cabeza
-* 3. X del primer cuartil del cuerpo
-* 4. Y del primer cuartil del cuerpo
-* 5. X de la mitad del cuerpo
-* 6. Y de la mitad del cuerpo
-* 7. X del tercer cuartil del cuerpo
-* 8. Y del tercer cuartil del cuerpo
-* 9. X del final del cuerpo
-* 10. Y del final del cuerpo
-* 11. X de la comida
-* 12. Y de la comida
-* 13. Se dirige a la derecha
-* 14. Se dirige a abajo
-* 15. Se dirige a la izquierda
-* 16. Se dirige a arriba
-* 17. Tamaño actual
-* */
-
 class Snake
 {
     constructor()
@@ -123,8 +125,7 @@ class Snake
         this.q1=1;
         this.q2=2;
         this.q3=3;
-        let topology = [17,9,9,4,1];
-        this.brain = new NeuronalNetwork(topology,new Sigmoid());
+        this.brain = new NeuronalNetwork(TOPOLOGY,new Sigmoid());
     }
 
     draw()
