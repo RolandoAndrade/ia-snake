@@ -2,27 +2,32 @@ class Sigmoid
 {
     f(x)
     {
-        return 1/(1-Math.exp(-x));
+        return 1 / (1 + Math.exp(-x));
     }
 
     ddF(x)
     {
-        return this.f(x)*(1-this.f(x));
+        return this.f(x) * (1 - this.f(x));
     }
 
     F(x)
     {
-        x.forEach((i)=>{
-            i.forEach((j)=>{
-                j = this.f(j);
-            })
-        })
+        for(let i = 0;i<x.length;i++)
+        {
+            for (let j = 0; j<x[i].length;j++)
+            {
+                x[i][j]=this.f(x[i][j]);
+            }
+        }
+        return x;
     }
 
     dF(x)
     {
-        x.forEach((i)=>{
-            i.forEach((j)=>{
+        x.forEach((i) =>
+        {
+            i.forEach((j) =>
+            {
                 j = this.ddF(j);
             })
         })
@@ -32,25 +37,37 @@ class Sigmoid
 function dot(a,b)
 {
     let r = [];
-    for (let i = 0; i <a.length;i++)
+    for(let k = 0; k < b[0].length;k++)
     {
-        let sum = 0;
-        for (let j = 0; j < a[i].length;j++)
+        for (let i = 0; i < a.length; i++)
         {
-            sum+=a[i][j]*b[j][i];
+            let sum = 0;
+            for (let j = 0; j < b.length; j++)
+            {
+                sum += a[i][j] * b[j][k];
+            }
+            if(k===0)
+            {
+                r.push([sum]);
+            }
+            else
+            {
+                r[i].push(sum);
+            }
+
         }
-        r.push(sum);
     }
+
     return r;
 }
 
 function sum(a,b)
 {
-    for (let i = 0; i <a.length;i++)
+    for (let i = 0; i < a.length; i++)
     {
-        for (let j = 0; j < a[i].length;j++)
+        for (let j = 0; j < a[i].length; j++)
         {
-            a[i][j]+=b[i][j];
+            a[i][j] += b[i][j];
         }
     }
     return a;
@@ -82,3 +99,6 @@ class Layer
     }
 
 }
+
+let l1 = new Layer(3,3,new Sigmoid(),0.01);
+console.log(l1.getOutput([[1],[2],[3]]));
