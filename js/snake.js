@@ -86,34 +86,45 @@ class Body extends Rectangle
     }
 }
 
+/*
+* Descripción del cerebro
+*
+* Capa de entrada:
+*
+* 1. X de la cabeza
+* 2. Y de la cabeza
+* 3. X del primer cuartil del cuerpo
+* 4. Y del primer cuartil del cuerpo
+* 5. X de la mitad del cuerpo
+* 6. Y de la mitad del cuerpo
+* 7. X del tercer cuartil del cuerpo
+* 8. Y del tercer cuartil del cuerpo
+* 9. X del final del cuerpo
+* 10. Y del final del cuerpo
+* 11. X de la comida
+* 12. Y de la comida
+* 13. Se dirige a la derecha
+* 14. Se dirige a abajo
+* 15. Se dirige a la izquierda
+* 16. Se dirige a arriba
+* 17. Tamaño actual
+* */
+
 class Snake
 {
     constructor()
     {
         this.snake = [];
         this.alive = true;
-        for (let i = 0; i < 4; i++)
+        for (let i = 0; i < 5; i++)
         {
             this.snake.push(new Body(100 - 20 * i, 100, SQUARE_WIDTH, 0));
         }
-        let head = this.snake[0];
-        document.addEventListener("keydown", function (e)
-        {
-            switch (e.keyCode)
-            {
-                case 37:
-                    head.left();
-                    break;
-                case 38:
-                    head.up();
-                    break;
-                case 39:
-                    head.right();
-                    break;
-                case 40:
-                    head.down();
-            }
-        })
+        this.q1=1;
+        this.q2=2;
+        this.q3=3;
+        let topology = [17,9,9,4,1];
+        this.brain = new NeuronalNetwork(topology,new Sigmoid());
     }
 
     draw()
@@ -159,6 +170,47 @@ class Snake
     growUp()
     {
         let last = this.snake[this.snake.length - 1];
-        this.snake.push(new Body(last.x - last.vx, last.y - last.vy, last.vx, last.vy))
+        this.snake.push(new Body(last.x - last.vx, last.y - last.vy, last.vx, last.vy));
+        let size = this.snake.length;
+        this.q1=Math.trunc(size/4);
+        this.q2=Math.trunc(size/2);
+        this.q3=Math.trunc(3*size/4);
+    }
+
+    think(food)
+    {
+        let head = this.snake[0];
+        let headX = head.x;
+        let headY = head.y;
+        let q1X = this.snake[this.q1].x;
+        let q1Y = this.snake[this.q1].y;
+        let q2X = this.snake[this.q2].x;
+        let q2Y = this.snake[this.q2].y;
+        let q3X = this.snake[this.q3].x;
+        let q3Y = this.snake[this.q3].y;
+        let tailX = this.snake[this.snake.length-1].x;
+        let tailY = this.snake[this.snake.length-1].y;
+        let rig = this.snake[0].vx>0?1:0;
+        let lef = this.snake[0].vx<0?1:0;
+        let up = this.snake[0].vy<0?1:0;
+        let dow = this.snake[0].vy>0?1:0;
+        let out = this.brain.getOutput([[headX,headY,q1X,q1Y,q2X,q2Y,q3X,q3Y,
+                              tailX,tailY,food.x,food.y, rig, dow, lef, up,this.snake.length]])[0][0];
+        if(out<0.25)
+        {
+            head.up();
+        }
+        else if(out<0.5)
+        {
+            head.right();
+        }
+        else if(out<0.75)
+        {
+            head.down();
+        }
+        else
+        {
+            head.left();
+        }
     }
 }

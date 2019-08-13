@@ -37,6 +37,7 @@ class Game
         {
             this.background.draw();
             this.score.draw();
+            this.snake.think(this.food);
             this.snake.draw();
             if(this.food.got())
             {

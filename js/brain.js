@@ -5,11 +5,6 @@ class Sigmoid
         return 1 / (1 + Math.exp(-x));
     }
 
-    ddF(x)
-    {
-        return this.f(x) * (1 - this.f(x));
-    }
-
     F(x)
     {
         for(let i = 0;i<x.length;i++)
@@ -20,17 +15,6 @@ class Sigmoid
             }
         }
         return x;
-    }
-
-    dF(x)
-    {
-        x.forEach((i) =>
-        {
-            i.forEach((j) =>
-            {
-                j = this.ddF(j);
-            })
-        })
     }
 }
 
@@ -75,7 +59,7 @@ function sum(a,b)
 
 class Layer
 {
-    constructor(numberOfNeurons, numberOfInputs, activationFunction, learningRate)
+    constructor(numberOfNeurons, numberOfInputs, activationFunction)
     {
         this.W = [];
         this.b = [];
@@ -90,7 +74,6 @@ class Layer
             this.b.push([1]);
         }
         this.activationFunction = activationFunction;
-        this.learningRate = learningRate;
     }
 
     getOutput(x)
@@ -100,5 +83,24 @@ class Layer
 
 }
 
-let l1 = new Layer(3,3,new Sigmoid(),0.01);
-console.log(l1.getOutput([[1],[2],[3]]));
+
+class NeuronalNetwork
+{
+    constructor(topology, activationFunction)
+    {
+        this.layers = [];
+        let inputs = topology[0];
+        topology.forEach(e=>{
+            this.layers.push(new Layer(e,inputs,activationFunction));
+            inputs = e;
+        })
+    }
+
+    getOutput(x)
+    {
+        this.layers.forEach(l=>{
+            x = l.getOutput(x);
+        });
+        return x;
+    }
+}
