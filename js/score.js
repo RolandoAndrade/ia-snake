@@ -3,7 +3,8 @@ class Food extends Rectangle
     constructor(snake)
     {
         super(0, 0, SQUARE_WIDTH, SQUARE_WIDTH, "#ff406e");
-        this.generate(snake);
+        this.x = 160;
+        this.y = 200;
     }
 
     generate(snaky)

@@ -108,21 +108,18 @@ class NeuronalNetwork
 
     mutate()
     {
-        this.layers.forEach(l=>
+        this.layers.forEach((l,k)=>
         {
             l.W.forEach((r,i)=>
             {
                 r.forEach((c,j)=>
                 {
-                    if(Math.random()<0.5)
-                    {
-                        this.layers.W[i][j] += Math.random() * 2 * STEP - STEP;
-                    }
+                    this.layers[k].W[i][j] += Math.random() * 2 * STEP - STEP;
                 })
             });
             l.b.forEach((r,i)=>
             {
-                this.layers.b[i][0] += Math.random() * 2 * STEP - STEP;
+                this.layers[k].b[i][0] += Math.random() * 2 * STEP - STEP;
             })
         })
     }

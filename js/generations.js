@@ -1,6 +1,6 @@
 const SURVIVOR_RATE = 0.3;
-const POPULATION = 200;
-const MUTATION_RATE = 0.5;
+const POPULATION = 1000;
+const MUTATION_RATE = 0.7;
 class Generation
 {
     constructor(snakes)
@@ -12,11 +12,13 @@ class Generation
 
     kill()
     {
-        this.snakes.sort(function(a, b) {return b.snake.length - a.snake.length});
+
+        this.snakes.sort(function(a, b) {return (b.snake.length*100+b.framesAlive*0.5+b.snake[0].turns*3) - (a.snake.length*100+a.framesAlive*0.5+a.snake[0].turns*3)});
         for(let i = 0; i < POPULATION-this.SURVIVORS; i++)
         {
             this.snakes.pop();
         }
+
     }
 
 
@@ -27,7 +29,7 @@ class Generation
         let father = this.snakes[Math.floor(Math.random() * this.SURVIVORS)];
         let mother = this.snakes[Math.floor(Math.random() * this.SURVIVORS)];
         let layers = [];
-        father.layers.forEach((e)=>
+        father.brain.layers.forEach((e)=>
         {
             layers.push(e);
         });

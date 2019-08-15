@@ -26,6 +26,17 @@ class Game
         this.gameOver = true;
         this.family.nextGeneration();
         this.gameOver = false;
+        this.drawed = 0;
+        this.scores.forEach(e=>
+        {
+            e.score = 0;
+        })
+        this.food = [];
+        for(let i = 0; i < POPULATION; i++)
+        {
+            this.food.push(new Food(this.snakes[i]));
+        }
+        console.log("fin");
     }
 
     init()
@@ -58,8 +69,8 @@ class Game
             {
                 if(e.alive)
                 {
-                    this.snakes[i].think(this.food[i]);
-                    this.snakes.draw(this.drawed===-1);
+                    e.think(this.food[i]);
+                    e.draw(true);
                     this.drawed = i;
                 }
             });
@@ -70,6 +81,7 @@ class Game
                     if(e.got(this.snakes[i]))
                     {
                         this.scores[i].add();
+                        console.log(i,this.snakes[i])
                     }
                 });
                 this.food[this.drawed].draw();
@@ -93,7 +105,8 @@ let game = new Game();
 
 function loop()
 {
+
     game.loop();
 }
 
-let interval = window.setInterval(loop,20);
+let interval = window.setInterval(loop,1);
