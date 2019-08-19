@@ -1,6 +1,14 @@
 const SURVIVOR_RATE = 0.3;
-const POPULATION = 1000;
+const POPULATION = 2000;
 const MUTATION_RATE = 0.7;
+
+function cloneObject(src)
+{
+    return JSON.parse(JSON.stringify(src));
+}
+
+
+
 class Generation
 {
     constructor(snakes)
@@ -29,10 +37,10 @@ class Generation
         let father = this.snakes[Math.floor(Math.random() * this.SURVIVORS)];
         let mother = this.snakes[Math.floor(Math.random() * this.SURVIVORS)];
         let layers = [];
-        father.brain.layers.forEach((e)=>
+        father.brain.layers.forEach(e=>
         {
-            layers.push(e);
-        });
+            layers.push(cloneObject(e));
+        })
         layers.forEach((l,i)=>
         {
             l.W.forEach((r,j)=>

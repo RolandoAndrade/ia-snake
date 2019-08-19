@@ -213,19 +213,49 @@ class Snake
                               tailX,tailY,food.x/BOARD_WIDTH,food.y/BOARD_WIDTH, rig, dow, lef, up,this.snake.length]])[0][0];
         if(out<0.25)
         {
-            head.up();
+            if(dow===1)
+            {
+                this.alive=false;
+            }
+            else
+            {
+                head.up();
+            }
+
         }
         else if(out<0.5)
         {
-            head.right();
+            if(lef===1)
+            {
+                this.alive=false;
+            }
+            else
+            {
+                head.right();
+            }
+
         }
         else if(out<0.75)
         {
-            head.down();
+            if(up===1)
+            {
+                this.alive=false;
+            }
+            else
+            {
+                head.down();
+            }
         }
         else
         {
-            head.left();
+            if(rig===1)
+            {
+                this.alive=false;
+            }
+            else
+            {
+                head.left();
+            }
         }
     }
 }

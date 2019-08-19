@@ -83,8 +83,9 @@ class Game
                         this.scores[i].add();
                         console.log(i,this.snakes[i])
                     }
+                    e.draw();
                 });
-                this.food[this.drawed].draw();
+                //this.food[this.drawed].draw();
             }
             else
             {
