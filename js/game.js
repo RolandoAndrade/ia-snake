@@ -111,6 +111,7 @@ class Board
         this.snake = new Snake(this.x, this.y);
         this.score = new Score(this.x, this.y);
         this.food = new Food(this.snake, this.x, this.y);
+        this.gameOver = false;
     }
 
     draw()
@@ -118,7 +119,16 @@ class Board
         this.score.draw();
         if(this.snake.alive)
         {
+            this.snake.think(this.food);
             this.snake.draw();
+            if(this.food.got(this.snake))
+            {
+                this.score.add();
+            }
+        }
+        else
+        {
+            this.gameOver = true;
         }
         this.food.draw();
     }
@@ -144,9 +154,11 @@ class View
     {
         this.background.draw();
 
+        this.boards.forEach(e=>e.draw());
+
         for (let i = 0; i < 11; i++)
         {
-            ctx.strokeStyle = "#ddd";
+            ctx.strokeStyle = "#78dd88";
             ctx.beginPath();
             ctx.moveTo(0, BOARD_WIDTH * i);
             ctx.lineTo(WIDTH, BOARD_WIDTH * i);
@@ -155,7 +167,7 @@ class View
             ctx.stroke();
             ctx.closePath();
         }
-        this.boards.forEach(e=>e.draw());
+
     }
 }
 
