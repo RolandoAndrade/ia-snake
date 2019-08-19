@@ -1,10 +1,11 @@
 class Food extends Rectangle
 {
-    constructor(snake)
+    constructor(snake, x, y)
     {
         super(0, 0, SQUARE_WIDTH, SQUARE_WIDTH, "#ff406e");
-        this.x = 160;
-        this.y = 200;
+        this.lx = x;
+        this.ly = y;
+        this.generate(snake);
     }
 
     generate(snaky)
@@ -12,8 +13,8 @@ class Food extends Rectangle
         let snake = snaky.snake;
         while (true)
         {
-            this.x = (Math.floor(Math.floor(Math.random() * 400) / 20)) * 20;
-            this.y = (Math.floor(Math.floor(Math.random() * 400) / 20)) * 20;
+            this.x = this.lx + (Math.floor(Math.floor(Math.random() * BOARD_WIDTH) / SQUARE_WIDTH)) * SQUARE_WIDTH;
+            this.y = this.ly + (Math.floor(Math.floor(Math.random() * BOARD_WIDTH) / SQUARE_WIDTH)) * SQUARE_WIDTH;
             let b = false;
             for (let i = 0; i < snake.length && !b; i++)
             {
@@ -40,11 +41,11 @@ class Food extends Rectangle
 
 class Score
 {
-    constructor(i,j)
+    constructor(x,y)
     {
         this.score = 0;
-        this.x = BOARD_WIDTH*j+BOARD_WIDTH/2;
-        this.y = BOARD_WIDTH*i+BOARD_WIDTH/2+15;
+        this.x = x+BOARD_WIDTH/2;
+        this.y = y+BOARD_WIDTH/2+15;
     }
 
     draw()

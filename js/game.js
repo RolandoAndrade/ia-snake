@@ -109,7 +109,8 @@ class Board
         this.x = BOARD_WIDTH * j;
         this.y = BOARD_WIDTH * i;
         this.snake = new Snake(this.x, this.y);
-        this.score = new Score(i,j);
+        this.score = new Score(this.x, this.y);
+        this.food = new Food(this.snake, this.x, this.y);
     }
 
     draw()
@@ -119,6 +120,7 @@ class Board
         {
             this.snake.draw();
         }
+        this.food.draw();
     }
 }
 
