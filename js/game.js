@@ -36,7 +36,6 @@ class Game
         {
             this.food.push(new Food(this.snakes[i]));
         }
-        console.log("fin");
     }
 
     init()
@@ -81,7 +80,6 @@ class Game
                     if(e.got(this.snakes[i]))
                     {
                         this.scores[i].add();
-                        console.log(i,this.snakes[i])
                     }
                     e.draw();
                 });

@@ -189,7 +189,6 @@ class Snake
         this.q1=Math.trunc(size/4);
         this.q2=Math.trunc(size/2);
         this.q3=Math.trunc(3*size/4);
-        console.log("comí", size);
     }
 
     think(food)

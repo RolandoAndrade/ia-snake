@@ -18,6 +18,19 @@ class Sigmoid
     }
 }
 
+class ReLu
+{
+    f(x)
+    {
+        return 1 / (1 + Math.exp(-x));
+    }
+
+    F(x)
+    {
+        return Math.max(0, x);
+    }
+}
+
 function dot(a,b)
 {
     let r = [];
@@ -68,7 +81,7 @@ class Layer
             let weights = [];
             for(let j = 0; j < numberOfInputs;j++)
             {
-                weights.push(Math.random()-0.5);
+                weights.push(Math.random()*100-50);
             }
             this.W.push(weights);
             this.b.push([1]);
@@ -83,7 +96,7 @@ class Layer
 
 }
 
-const STEP = 0.001;
+const STEP = 0.01;
 
 class NeuronalNetwork
 {
