@@ -40,19 +40,21 @@ class Food extends Rectangle
 
 class Score
 {
-    constructor()
+    constructor(i,j)
     {
         this.score = 0;
+        this.x = BOARD_WIDTH*j+BOARD_WIDTH/2;
+        this.y = BOARD_WIDTH*i+BOARD_WIDTH/2+15;
     }
 
     draw()
     {
         ctx.textAlign = "center";
-        ctx.font ='250px Arial, sans-serif';
+        ctx.font ='30px Arial, sans-serif';
         ctx.fillStyle="#A3A3A3";
-        ctx.fillText(""+this.score,200,270);
-        ctx.font ='15px Arial, sans-serif';
-        ctx.fillText("Rolando Andrade",200,320);
+        ctx.fillText(""+this.score,this.x,this.y);
+        ctx.font ='8px Arial, sans-serif';
+        ctx.fillText("Rolando Andrade",this.x,this.y+15);
     }
 
     add()

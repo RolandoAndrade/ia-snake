@@ -1,9 +1,9 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
-const SQUARE_WIDTH = 20;
-const BOARD_WIDTH = 400;
-const BOARD_HEIGHT = 400;
+const SQUARE_WIDTH = 4;
+const BOARD_WIDTH = 80;
+const BOARD_HEIGHT = 80;
 
 
 class Game
@@ -11,7 +11,7 @@ class Game
     constructor()
     {
         this.gameOver = true;
-        this.background = new Rectangle(0,0,400,400, "#424242");
+        this.background = new Rectangle(0,0,800,600, "#424242");
         this.background.draw();
         this.init();
         let a = this;
@@ -98,14 +98,73 @@ class Game
         }
     }
 }
+const WIDTH = 800;
+const HEIGHT = 640;
 
+
+class Board
+{
+    constructor(i,j)
+    {
+        this.x = BOARD_WIDTH * j;
+        this.y = BOARD_WIDTH * i;
+        this.snake = new Snake(this.x, this.y);
+        this.score = new Score(i,j);
+    }
+
+    draw()
+    {
+        this.score.draw();
+        if(this.snake.alive)
+        {
+            this.snake.draw();
+        }
+    }
+}
+
+class View
+{
+    constructor()
+    {
+        this.background = new Rectangle(0, 0, 800, 640, "#424242");
+        this.background.draw();
+        this.boards = [];
+        for (let i = 0; i < 10; i++)
+        {
+            for (let j = 0; j < 8; j++)
+            {
+                this.boards.push(new Board(j, i));
+            }
+        }
+    }
+
+    loop()
+    {
+        this.background.draw();
+
+        for (let i = 0; i < 11; i++)
+        {
+            ctx.strokeStyle = "#ddd";
+            ctx.beginPath();
+            ctx.moveTo(0, BOARD_WIDTH * i);
+            ctx.lineTo(WIDTH, BOARD_WIDTH * i);
+            ctx.moveTo(BOARD_WIDTH * i, 0);
+            ctx.lineTo(BOARD_WIDTH * i, HEIGHT);
+            ctx.stroke();
+            ctx.closePath();
+        }
+        this.boards.forEach(e=>e.draw());
+    }
+}
 
 let game = new Game();
+let view = new View();
+
 
 function loop()
 {
 
-    game.loop();
+    view.loop();
 }
 
-let interval = window.setInterval(loop,1);
+let interval = window.setInterval(loop,100);

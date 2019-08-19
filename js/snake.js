@@ -119,8 +119,10 @@ class Body extends Rectangle
 
 class Snake
 {
-    constructor()
+    constructor(x,y)
     {
+        this.x = x;
+        this.y = y;
         this.reset();
         this.brain = new NeuronalNetwork(TOPOLOGY,new Sigmoid());
 
@@ -132,7 +134,7 @@ class Snake
         this.alive = true;
         for (let i = 0; i < 6; i++)
         {
-            this.snake.push(new Body(100 - 20 * i, 100, SQUARE_WIDTH, 0));
+            this.snake.push(new Body(this.x + 32 - SQUARE_WIDTH * i, this.y + 40, SQUARE_WIDTH, 0));
         }
         this.q1=1;
         this.q2=2;
@@ -162,7 +164,7 @@ class Snake
     outside()
     {
         let head = this.snake[0];
-        if (head.x < 0 || head.x >= BOARD_WIDTH || head.y < 0 || head.y >= BOARD_HEIGHT)
+        if (head.x < this.x || head.x >= this.x+BOARD_WIDTH || head.y < this.y || head.y >= this.y+BOARD_HEIGHT)
         {
             this.kill();
         }
