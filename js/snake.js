@@ -126,7 +126,6 @@ class Snake
         this.y = y;
         this.reset();
         this.brain = new NeuronalNetwork(TOPOLOGY,new Sigmoid());
-
     }
 
     reset(color = "#71ebff")
@@ -297,27 +296,45 @@ class Snake
             toTheYFood = -1;
         }
 
-        let out = this.brain.getOutput([
-            [
-                isFoodOver, isFoodUnder, isFoodAtLeft, isFoodAtRight,
-                isFoodUpLeft, isFoodUpRight, isFoodDownLeft, isFoodDownRight,
-                isClearUp, isClearDown, isClearLeft, isClearRight,
-                isClearUpLeft, isClearUpRight, isClearDownLeft, isClearDownRight,
-                toTheXFood, toTheYFood
-            ]
-        ]);
+
+        let input = [
+            isFoodOver, isFoodUnder, isFoodAtLeft, isFoodAtRight,
+            isFoodUpLeft, isFoodUpRight, isFoodDownLeft, isFoodDownRight,
+            isClearUp, isClearDown, isClearLeft, isClearRight,
+            isClearUpLeft, isClearUpRight, isClearDownLeft, isClearDownRight,
+            toTheXFood, toTheYFood
+        ];
+        let out = this.brain.getOutput([input]);
+
+        out.forEach((e,i)=>
+        {
+            new Circle(this.x+BOARD_WIDTH-2,this.y+35+4*i,1,"#b6b3a8").draw();
+        });
+
         if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0] && out[0][0] >= out[3][0])
         {
+            new Circle(this.x+BOARD_WIDTH-2,this.y+35,1,"#ff55a2").draw();
             head.left();
         } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0] && out[1][0] >= out[3][0])
         {
+            new Circle(this.x+BOARD_WIDTH-2,this.y+35+4,1,"#ff55a2").draw();
             head.right();
         } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0] && out[2][0] >= out[3][0])
         {
+            new Circle(this.x+BOARD_WIDTH-2,this.y+35+8,1,"#ff55a2").draw();
             head.up();
         } else
         {
+            new Circle(this.x+BOARD_WIDTH-2,this.y+35+12,1,"#ff55a2").draw();
             head.down();
         }
+
+        input.forEach((e,i)=>
+        {
+            new Circle(this.x+2,this.y+5+4*i,1,e?"#ff55a2":"#b6b3a8").draw();
+        })
+
+
+
     }
 }

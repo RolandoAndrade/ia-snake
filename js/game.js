@@ -85,16 +85,6 @@ class View
             if(!this.finished)
             {
                 this.background.draw();
-                this.finished = true;
-                this.boards.forEach(e=>
-                {
-                    e.draw();
-                    if(!e.gameOver)
-                    {
-                        this.finished = false;
-                    }
-                });
-
                 for (let i = 0; i < 11; i++)
                 {
                     ctx.strokeStyle = "#78dd88";
@@ -106,6 +96,17 @@ class View
                     ctx.stroke();
                     ctx.closePath();
                 }
+                this.finished = true;
+                this.boards.forEach(e=>
+                {
+                    e.draw();
+                    if(!e.gameOver)
+                    {
+                        this.finished = false;
+                    }
+                });
+
+
             }
             else
             {
