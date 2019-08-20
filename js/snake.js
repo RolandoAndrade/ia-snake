@@ -131,15 +131,13 @@ class Snake
 
     reset(color = "#71ebff")
     {
+        this.color = color;
         this.snake = [];
         this.alive = true;
         for (let i = 0; i < 6; i++)
         {
             this.snake.push(new Body(this.x + 32 - SQUARE_WIDTH * i, this.y + 40, SQUARE_WIDTH, 0, color));
         }
-        this.q1=1;
-        this.q2=2;
-        this.q3=3;
     }
 
     draw(draw = true)
@@ -185,11 +183,7 @@ class Snake
     growUp()
     {
         let last = this.snake[this.snake.length - 1];
-        this.snake.push(new Body(last.x - last.vx, last.y - last.vy, last.vx, last.vy));
-        let size = this.snake.length;
-        this.q1=Math.trunc(size/4);
-        this.q2=Math.trunc(size/2);
-        this.q3=Math.trunc(3*size/4);
+        this.snake.push(new Body(last.x - last.vx, last.y - last.vy, last.vx, last.vy, this.color));
         this.snake[0].valoration+=1000;
     }
 

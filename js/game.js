@@ -8,6 +8,7 @@ const BOARD_HEIGHT = 80;
 const WIDTH = 800;
 const HEIGHT = 640;
 
+let numberBoard = 0;
 
 class Board
 {
@@ -16,7 +17,7 @@ class Board
         this.x = BOARD_WIDTH * j;
         this.y = BOARD_WIDTH * i;
         this.snake = new Snake(this.x, this.y);
-        this.score = new Score(this.x, this.y);
+        this.score = new Score(this.x, this.y, numberBoard++);
         this.food = new Food(this.snake, this.x, this.y);
         this.gameOver = false;
     }
@@ -64,6 +65,9 @@ class View
 
         this.family = new Generation(this.boards);
         this.finished = false;
+        this.paused = false;
+        let a = this;
+        document.addEventListener("keydown", ()=>a.paused=!a.paused)
     }
 
     reset()
@@ -75,35 +79,39 @@ class View
 
     loop()
     {
-        if(!this.finished)
+        if(!this.paused)
         {
-            this.background.draw();
-            this.finished = true;
-            this.boards.forEach(e=>
+            if(!this.finished)
             {
-                e.draw();
-                if(!e.gameOver)
+                this.background.draw();
+                this.finished = true;
+                this.boards.forEach(e=>
                 {
-                    this.finished = false;
-                }
-            });
+                    e.draw();
+                    if(!e.gameOver)
+                    {
+                        this.finished = false;
+                    }
+                });
 
-            for (let i = 0; i < 11; i++)
+                for (let i = 0; i < 11; i++)
+                {
+                    ctx.strokeStyle = "#78dd88";
+                    ctx.beginPath();
+                    ctx.moveTo(0, BOARD_WIDTH * i);
+                    ctx.lineTo(WIDTH, BOARD_WIDTH * i);
+                    ctx.moveTo(BOARD_WIDTH * i, 0);
+                    ctx.lineTo(BOARD_WIDTH * i, HEIGHT);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+            }
+            else
             {
-                ctx.strokeStyle = "#78dd88";
-                ctx.beginPath();
-                ctx.moveTo(0, BOARD_WIDTH * i);
-                ctx.lineTo(WIDTH, BOARD_WIDTH * i);
-                ctx.moveTo(BOARD_WIDTH * i, 0);
-                ctx.lineTo(BOARD_WIDTH * i, HEIGHT);
-                ctx.stroke();
-                ctx.closePath();
+                this.reset();
             }
         }
-        else
-        {
-            this.reset();
-        }
+
     }
 }
 

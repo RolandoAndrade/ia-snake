@@ -41,11 +41,12 @@ class Food extends Rectangle
 
 class Score
 {
-    constructor(x,y)
+    constructor(x,y, number = 0)
     {
         this.score = 0;
         this.x = x+BOARD_WIDTH/2;
         this.y = y+BOARD_WIDTH/2+15;
+        this.number = number;
     }
 
     draw()
@@ -56,6 +57,8 @@ class Score
         ctx.fillText(""+this.score,this.x,this.y);
         ctx.font ='8px Arial, sans-serif';
         ctx.fillText("Rolando Andrade",this.x,this.y+15);
+        ctx.font ='10px Arial, sans-serif';
+        ctx.fillText(this.number+"",this.x,this.y-40);
     }
 
     add()
