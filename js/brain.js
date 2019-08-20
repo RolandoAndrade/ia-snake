@@ -90,7 +90,7 @@ class Layer
             let weights = [];
             for(let j = 0; j < numberOfInputs;j++)
             {
-                weights.push(Math.random()*10-5);
+                weights.push(Math.random()*50-25);
             }
             this.W.push(weights);
             this.b.push([1]);

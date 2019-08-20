@@ -207,10 +207,10 @@ class Snake
         let isFoodAtLeft = fx <= x && y=== fy;
         let isFoodAtRight = fx >= x && y === fy;
 
-        let isFoodUpLeft = fx < x && fy < y && Math.abs(fx-fy)===Math.abs(x-y);
-        let isFoodUpRight = fx > x && fy < y && Math.abs(fx-fy)===Math.abs(x-y);
-        let isFoodDownLeft = fx < x && fy > y && Math.abs(fx-fy)===Math.abs(x-y);
-        let isFoodDownRight = fx > x && fy > y&& Math.abs(fx-fy)===Math.abs(x-y);
+        let isFoodUpLeft = fx < x && fy < y && Math.abs(fx-x)===Math.abs(fy-y);
+        let isFoodUpRight = fx > x && fy < y && Math.abs(fx-x)===Math.abs(fy-y);
+        let isFoodDownLeft = fx < x && fy > y && Math.abs(fx-x)===Math.abs(fy-y);
+        let isFoodDownRight = fx > x && fy > y&& Math.abs(fx-x)===Math.abs(fy-y);
 
 
         let isClearUp = 1;
@@ -228,6 +228,7 @@ class Snake
 
         this.snake.forEach(e=>
         {
+
             if(e!==head)
             {
                 let dx = e.x % BOARD_WIDTH, dy = e.y % BOARD_WIDTH;
@@ -255,8 +256,9 @@ class Snake
                     }
                 }
 
-                if(Math.abs(dx-dy)===Math.abs(x-y))
+                if(Math.abs(dx-x)===Math.abs(dy-y))
                 {
+
                     if(dy<y&&dx<x)
                     {
                         isClearUpLeft = 0;
@@ -269,7 +271,7 @@ class Snake
                     {
                         isClearDownLeft = 0;
                     }
-                    else
+                    else if(dy>y&&dx>x)
                     {
                         isClearDownRight = 0;
                     }

@@ -45,6 +45,7 @@ class Board
     {
         this.score.score = 0;
         this.gameOver = false;
+        this.food = new Food(this.snake, this.x, this.y);
     }
 }
 
