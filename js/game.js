@@ -5,99 +5,6 @@ const SQUARE_WIDTH = 4;
 const BOARD_WIDTH = 80;
 const BOARD_HEIGHT = 80;
 
-
-class Game
-{
-    constructor()
-    {
-        this.gameOver = true;
-        this.background = new Rectangle(0,0,800,600, "#424242");
-        this.background.draw();
-        this.init();
-        let a = this;
-        document.addEventListener("keydown", function (e)
-        {
-            a.reset();
-        });
-    }
-
-    reset()
-    {
-        this.gameOver = true;
-        this.family.nextGeneration();
-        this.gameOver = false;
-        this.drawed = 0;
-        this.scores.forEach(e=>
-        {
-            e.score = 0;
-        })
-        this.food = [];
-        for(let i = 0; i < POPULATION; i++)
-        {
-            this.food.push(new Food(this.snakes[i]));
-        }
-    }
-
-    init()
-    {
-        this.snakes = [];
-        this.food = [];
-        this.scores = [];
-        this.drawed = 0;
-
-        this.family = new Generation(this.snakes);
-
-
-        for(let i = 0; i < POPULATION; i++)
-        {
-            this.snakes.push(new Snake());
-            this.food.push(new Food(this.snakes[i]));
-            this.scores.push(new Score());
-        }
-        this.gameOver = false;
-    }
-
-    loop()
-    {
-        if(!this.gameOver)
-        {
-            this.background.draw();
-            this.scores[this.drawed].draw();
-            this.drawed = -1;
-            this.snakes.forEach((e,i)=>
-            {
-                if(e.alive)
-                {
-                    e.think(this.food[i]);
-                    e.draw(true);
-                    this.drawed = i;
-                }
-            });
-            if(this.drawed!==-1)
-            {
-                this.food.forEach((e,i)=>
-                {
-                    if(e.got(this.snakes[i]))
-                    {
-                        this.scores[i].add();
-                    }
-                    e.draw();
-                });
-                //this.food[this.drawed].draw();
-            }
-            else
-            {
-                this.gameOver = true;
-            }
-
-
-        }
-        else
-        {
-            game.reset();
-        }
-    }
-}
 const WIDTH = 800;
 const HEIGHT = 640;
 
@@ -148,26 +55,48 @@ class View
                 this.boards.push(new Board(j, i));
             }
         }
+
+        this.family = new Generation(this.boards);
+        this.finished = false;
+    }
+
+    reset()
+    {
+        this.family.nextGeneration();
+        this.finished = false;
     }
 
     loop()
     {
-        this.background.draw();
-
-        this.boards.forEach(e=>e.draw());
-
-        for (let i = 0; i < 11; i++)
+        if(!this.finished)
         {
-            ctx.strokeStyle = "#78dd88";
-            ctx.beginPath();
-            ctx.moveTo(0, BOARD_WIDTH * i);
-            ctx.lineTo(WIDTH, BOARD_WIDTH * i);
-            ctx.moveTo(BOARD_WIDTH * i, 0);
-            ctx.lineTo(BOARD_WIDTH * i, HEIGHT);
-            ctx.stroke();
-            ctx.closePath();
-        }
+            this.background.draw();
+            this.finished = true;
+            this.boards.forEach(e=>
+            {
+                e.draw();
+                if(!e.gameOver)
+                {
+                    this.finished = false;
+                }
+            });
 
+            for (let i = 0; i < 11; i++)
+            {
+                ctx.strokeStyle = "#78dd88";
+                ctx.beginPath();
+                ctx.moveTo(0, BOARD_WIDTH * i);
+                ctx.lineTo(WIDTH, BOARD_WIDTH * i);
+                ctx.moveTo(BOARD_WIDTH * i, 0);
+                ctx.lineTo(BOARD_WIDTH * i, HEIGHT);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+        else
+        {
+            this.reset();
+        }
     }
 }
 
