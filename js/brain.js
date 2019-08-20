@@ -7,14 +7,15 @@ class Sigmoid
 
     F(x)
     {
+        let ax =[...x];
         for(let i = 0;i<x.length;i++)
         {
             for (let j = 0; j<x[i].length;j++)
             {
-                x[i][j]=this.f(x[i][j]);
+                ax[i][j]=this.f(ax[i][j]);
             }
         }
-        return x;
+        return ax;
     }
 }
 
@@ -22,12 +23,20 @@ class ReLu
 {
     f(x)
     {
-        return 1 / (1 + Math.exp(-x));
+        return Math.max(0, x);
     }
 
     F(x)
     {
-        return Math.max(0, x);
+        let ax =[...x];
+        for(let i = 0;i<x.length;i++)
+        {
+            for (let j = 0; j<x[i].length;j++)
+            {
+                ax[i][j]=this.f(ax[i][j]);
+            }
+        }
+        return ax;
     }
 }
 
@@ -81,7 +90,7 @@ class Layer
             let weights = [];
             for(let j = 0; j < numberOfInputs;j++)
             {
-                weights.push(Math.random()*100-50);
+                weights.push(Math.random()*10-5);
             }
             this.W.push(weights);
             this.b.push([1]);
@@ -107,7 +116,8 @@ class NeuronalNetwork
         topology.forEach(e=>{
             this.layers.push(new Layer(e,inputs,activationFunction));
             inputs = e;
-        })
+        });
+        this.layers[this.layers.length-1].activationFunction=new ReLu();
     }
 
     getOutput(x)

@@ -77,7 +77,22 @@ class Generation
             baby.y = this.boards[i].snake.y;
             this.boards[i].snake = baby;
         }
-        this.boards.forEach((e)=>e.snake.reset());
+        this.boards.forEach((e,i)=>
+        {
+
+            if(i===1)
+            {
+                e.snake.reset("#eeff7c");
+            }
+            else if(i<this.SURVIVORS)
+            {
+                e.snake.reset("#89ff90");
+            }
+            else
+            {
+                e.snake.reset();
+            }
+        });
         this.generation++;
     }
 }

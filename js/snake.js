@@ -1,34 +1,35 @@
-const TOPOLOGY = [17,9,9,1];
+const TOPOLOGY = [18,12,9,4];
 
 /*
 * Descripción del cerebro
 *
 * Capa de entrada:
 *
-* 1. X de la cabeza
-* 2. Y de la cabeza
-* 3. X del primer cuartil del cuerpo
-* 4. Y del primer cuartil del cuerpo
-* 5. X de la mitad del cuerpo
-* 6. Y de la mitad del cuerpo
-* 7. X del tercer cuartil del cuerpo
-* 8. Y del tercer cuartil del cuerpo
-* 9. X del final del cuerpo
-* 10. Y del final del cuerpo
-* 11. X de la comida
-* 12. Y de la comida
-* 13. Se dirige a la derecha
-* 14. Se dirige a abajo
-* 15. Se dirige a la izquierda
-* 16. Se dirige a arriba
-* 17. Tamaño actual
+* 1. La fruta esta arriba
+* 2. La fruta esta abajo
+* 3. La fruta esta a la izquierda
+* 4. La fruta esta a la derecha
+* 5. La fruta esta diagonalmente hacia arriba a la izquierda
+* 6. La fruta esta diagonalmente hacia arriba a la derecha
+* 7. La fruta esta diagonalmente hacia abajo a la izquierda
+* 8. La fruta esta diagonalmente hacia abajo a la derecha
+* 9. Despejado arriba
+* 10. Despejado abajo
+* 11. Despejado a la izquierda
+* 12. Despejado a la derecha
+* 13. Despejado diagonalmente hacia arriba a la izquierda
+* 14. Despejado diagonalmente hacia arriba a la derecha
+* 15. Despejado diagonalmente hacia abajo a la izquierda
+* 16. Despejado diagonalmente hacia abajo a la derecha
+* 17. Va hacia el x de la fruta
+* 18. Va hacia el y de la fruta
 * */
 
 class Body extends Rectangle
 {
-    constructor(x, y, vx, vy)
+    constructor(x, y, vx, vy, color)
     {
-        super(x, y, SQUARE_WIDTH, SQUARE_WIDTH, "#71ebff");
+        super(x, y, SQUARE_WIDTH, SQUARE_WIDTH, color);
         this.vx = vx;
         this.vy = vy;
         this.lastX = x;
@@ -128,13 +129,13 @@ class Snake
 
     }
 
-    reset()
+    reset(color = "#71ebff")
     {
         this.snake = [];
         this.alive = true;
         for (let i = 0; i < 6; i++)
         {
-            this.snake.push(new Body(this.x + 32 - SQUARE_WIDTH * i, this.y + 40, SQUARE_WIDTH, 0));
+            this.snake.push(new Body(this.x + 32 - SQUARE_WIDTH * i, this.y + 40, SQUARE_WIDTH, 0, color));
         }
         this.q1=1;
         this.q2=2;
@@ -197,70 +198,130 @@ class Snake
         return this.snake[0].valoration;
     }
 
+
+
     think(food)
     {
         let head = this.snake[0];
-        let headX = head.x/BOARD_WIDTH;
-        let headY = head.y/BOARD_WIDTH;
-        let q1X = this.snake[this.q1].x/BOARD_WIDTH;
-        let q1Y = this.snake[this.q1].y/BOARD_WIDTH;
-        let q2X = this.snake[this.q2].x/BOARD_WIDTH;
-        let q2Y = this.snake[this.q2].y/BOARD_WIDTH;
-        let q3X = this.snake[this.q3].x/BOARD_WIDTH;
-        let q3Y = this.snake[this.q3].y/BOARD_WIDTH;
-        let tailX = this.snake[this.snake.length-1].x/BOARD_WIDTH;
-        let tailY = this.snake[this.snake.length-1].y/BOARD_WIDTH;
-        let rig = this.snake[0].vx>0?1:this.snake[0].vx<0?-1:0;
-        let lef = this.snake[0].vx<0?1:this.snake[0].vx>0?-1:0;
-        let up = this.snake[0].vy<0?1:this.snake[0].vy>0?-1:0;
-        let dow = this.snake[0].vy>0?1:this.snake[0].vy<0?-1:0;
-        let out = this.brain.getOutput([[headX,headY,q1X,q1Y,q2X,q2Y,q3X,q3Y,
-                              tailX,tailY,food.x/BOARD_WIDTH,food.y/BOARD_WIDTH, rig, dow, lef, up,this.snake.length]])[0][0];
-        if(out<0.25)
-        {
-            if(dow===1)
-            {
-                this.alive=false;
-            }
-            else
-            {
-                head.up();
-            }
+        let x = head.x % BOARD_WIDTH;
+        let y = head.y % BOARD_WIDTH;
+        let fx = food.x % BOARD_WIDTH;
+        let fy = food.y % BOARD_WIDTH;
 
-        }
-        else if(out<0.5)
-        {
-            if(lef===1)
-            {
-                this.alive=false;
-            }
-            else
-            {
-                head.right();
-            }
+        let isFoodOver = fy <= y && x=== fx;
+        let isFoodUnder = fy >= y && x === fx;
+        let isFoodAtLeft = fx <= x && y=== fy;
+        let isFoodAtRight = fx >= x && y === fy;
 
-        }
-        else if(out<0.75)
+        let isFoodUpLeft = fx < x && fy < y && Math.abs(fx-fy)===Math.abs(x-y);
+        let isFoodUpRight = fx > x && fy < y && Math.abs(fx-fy)===Math.abs(x-y);
+        let isFoodDownLeft = fx < x && fy > y && Math.abs(fx-fy)===Math.abs(x-y);
+        let isFoodDownRight = fx > x && fy > y&& Math.abs(fx-fy)===Math.abs(x-y);
+
+
+        let isClearUp = 1;
+        let isClearDown = 1;
+        let isClearLeft = 1;
+        let isClearRight = 1;
+
+        let isClearUpLeft = 1;
+        let isClearUpRight = 1;
+        let isClearDownLeft = 1;
+        let isClearDownRight = 1;
+
+        let toTheXFood = 0;
+        let toTheYFood = 0;
+
+        this.snake.forEach(e=>
         {
-            if(up===1)
+            if(e!==head)
             {
-                this.alive=false;
+                let dx = e.x % BOARD_WIDTH, dy = e.y % BOARD_WIDTH;
+                if(dx === x)
+                {
+                    if(dy<y)
+                    {
+                        isClearUp = 0;
+                    }
+                    else
+                    {
+                        isClearDown = 0;
+                    }
+                }
+
+                if(dy === y)
+                {
+                    if(dx<x)
+                    {
+                        isClearLeft = 0;
+                    }
+                    else
+                    {
+                        isClearRight = 0;
+                    }
+                }
+
+                if(Math.abs(dx-dy)===Math.abs(x-y))
+                {
+                    if(dy<y&&dx<x)
+                    {
+                        isClearUpLeft = 0;
+                    }
+                    else if(dy<y&&dx>x)
+                    {
+                        isClearUpRight = 0;
+                    }
+                    else if(dy>y&&dx<x)
+                    {
+                        isClearDownLeft = 0;
+                    }
+                    else
+                    {
+                        isClearDownRight = 0;
+                    }
+                }
             }
-            else
-            {
-                head.down();
-            }
-        }
-        else
+        });
+
+        if(head.vx>0&&x<fx||head.vx<0&&fx<x)
         {
-            if(rig===1)
-            {
-                this.alive=false;
-            }
-            else
-            {
-                head.left();
-            }
+            toTheXFood = 1;
+        }
+        else if(head.vx<0&&x<fx||head.vx>0&&fx<x)
+        {
+            toTheXFood = -1;
+        }
+
+        if(head.vy>0&&y<fy||head.vy<0&&fy<y)
+        {
+            toTheYFood = 1;
+        }
+        else if(head.vy<0&&y<fy||head.vy>0&&fy<y)
+        {
+            toTheYFood = -1;
+        }
+
+        let out = this.brain.getOutput([
+            [
+                isFoodOver, isFoodUnder, isFoodAtLeft, isFoodAtRight,
+                isFoodUpLeft, isFoodUpRight, isFoodDownLeft, isFoodDownRight,
+                isClearUp, isClearDown, isClearLeft, isClearRight,
+                isClearUpLeft, isClearUpRight, isClearDownLeft, isClearDownRight,
+                toTheXFood, toTheYFood
+            ]
+        ]);
+        if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0] && out[0][0] >= out[3][0])
+        {
+            head.left();
+        } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0] && out[1][0] >= out[3][0])
+        {
+            head.right();
+        } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0] && out[2][0] >= out[3][0])
+        {
+            head.up();
+        } else
+        {
+            head.down();
         }
     }
 }
