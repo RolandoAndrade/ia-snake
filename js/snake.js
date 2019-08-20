@@ -35,7 +35,7 @@ class Body extends Rectangle
         this.lastY = y;
         this.lastVX = this.vx;
         this.lastVY = this.vy;
-        this.turns=0;
+        this.valoration = 0;
     }
 
     move()
@@ -47,8 +47,8 @@ class Body extends Rectangle
 
     draw()
     {
-
         super.draw();
+        this.valoration+=3;
     }
 
     forward(before)
@@ -67,7 +67,7 @@ class Body extends Rectangle
     {
         if (this.vy === 0)
         {
-            this.turns++;
+            this.valoration++;
             this.vx = 0;
             this.vy = -SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -79,7 +79,7 @@ class Body extends Rectangle
     {
         if (this.vy === 0)
         {
-            this.turns++;
+            this.valoration++;
             this.vx = 0;
             this.vy = SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -91,7 +91,7 @@ class Body extends Rectangle
     {
         if (this.vx === 0)
         {
-            this.turns++;
+            this.valoration++;
             this.vy = 0;
             this.vx = -SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -103,7 +103,7 @@ class Body extends Rectangle
     {
         if (this.vx === 0)
         {
-            this.turns++;
+            this.valoration++;
             this.vy = 0;
             this.vx = SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -139,12 +139,10 @@ class Snake
         this.q1=1;
         this.q2=2;
         this.q3=3;
-        this.framesAlive = 0;
     }
 
     draw(draw = true)
     {
-        this.framesAlive++;
         this.snake[0].move();
         for (let i = 0; i < this.snake.length; i++)
         {
@@ -191,6 +189,12 @@ class Snake
         this.q1=Math.trunc(size/4);
         this.q2=Math.trunc(size/2);
         this.q3=Math.trunc(3*size/4);
+        this.snake[0].valoration+=1000;
+    }
+
+    getValoration()
+    {
+        return this.snake[0].valoration;
     }
 
     think(food)

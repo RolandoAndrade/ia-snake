@@ -39,6 +39,12 @@ class Board
         }
         this.food.draw();
     }
+
+    reset()
+    {
+        this.score.score = 0;
+        this.gameOver = false;
+    }
 }
 
 class View
@@ -64,6 +70,7 @@ class View
     {
         this.family.nextGeneration();
         this.finished = false;
+        this.boards.forEach(e=>e.reset());
     }
 
     loop()
@@ -100,7 +107,6 @@ class View
     }
 }
 
-let game = new Game();
 let view = new View();
 
 

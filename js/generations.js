@@ -1,6 +1,6 @@
 const SURVIVOR_RATE = 0.3;
-const POPULATION = 2000;
-const MUTATION_RATE = 0.7;
+const POPULATION = 80;
+const MUTATION_RATE = 0.3;
 
 function cloneObject(src)
 {
@@ -11,22 +11,16 @@ function cloneObject(src)
 
 class Generation
 {
-    constructor(snakes)
+    constructor(boards)
     {
         this.generation = 1;
         this.SURVIVORS = SURVIVOR_RATE*POPULATION;
-        this.snakes = snakes;
+        this.boards = boards;
     }
 
     kill()
     {
-
-        this.snakes.sort(function(a, b) {return (b.snake.length*100+b.framesAlive*0.5+b.snake[0].turns*3) - (a.snake.length*100+a.framesAlive*0.5+a.snake[0].turns*3)});
-        for(let i = 0; i < POPULATION-this.SURVIVORS; i++)
-        {
-            this.snakes.pop();
-        }
-
+        this.boards.sort(function(a, b) {return b.snake.getValoration() - a.snake.getValoration()});
     }
 
 
@@ -34,13 +28,13 @@ class Generation
     {
         let baby = new Snake();
         let brain = new NeuronalNetwork(TOPOLOGY,new Sigmoid());
-        let father = this.snakes[Math.floor(Math.random() * this.SURVIVORS)];
-        let mother = this.snakes[Math.floor(Math.random() * this.SURVIVORS)];
+        let father = this.boards[Math.floor(Math.random() * this.SURVIVORS)].snake;
+        let mother = this.boards[Math.floor(Math.random() * this.SURVIVORS)].snake;
         let layers = [];
         father.brain.layers.forEach(e=>
         {
             layers.push(cloneObject(e));
-        })
+        });
         layers.forEach((l,i)=>
         {
             l.W.forEach((r,j)=>
@@ -60,7 +54,7 @@ class Generation
         });
         baby.brain.layers = layers;
         baby.brain = this.mutate(brain);
-        this.snakes.push(baby);
+        return baby;
     }
 
     mutate(brain)
@@ -78,9 +72,12 @@ class Generation
         this.kill();
         for(let i = this.SURVIVORS; i < POPULATION; i++)
         {
-            this.procreate();
+            let baby = this.procreate();
+            baby.x = this.boards[i].snake.x;
+            baby.y = this.boards[i].snake.y;
+            this.boards[i].snake = baby;
         }
-        this.snakes.forEach((e)=>e.reset());
+        this.boards.forEach((e)=>e.snake.reset());
         this.generation++;
     }
 }
