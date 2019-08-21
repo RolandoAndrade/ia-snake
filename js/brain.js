@@ -90,7 +90,7 @@ class Layer
             let weights = [];
             for(let j = 0; j < numberOfInputs;j++)
             {
-                weights.push(Math.random()*50-25);
+                weights.push(Math.random()*100-50);
             }
             this.W.push(weights);
             this.b.push([1]);
@@ -105,7 +105,7 @@ class Layer
 
 }
 
-const STEP = 0.5;
+const STEP = 0.05;
 
 class NeuronalNetwork
 {

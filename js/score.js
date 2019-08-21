@@ -5,7 +5,9 @@ class Food extends Rectangle
         super(0, 0, SQUARE_WIDTH, SQUARE_WIDTH, "#ff406e");
         this.lx = x;
         this.ly = y;
-        this.generate(snake);
+        this.x = x + 60;
+        this.y = y + 60;
+        //this.generate(snake);
     }
 
     generate(snaky)

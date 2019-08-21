@@ -1,4 +1,4 @@
-const TOPOLOGY = [22,8,4,3];
+const TOPOLOGY = [22,10,10,4];
 const FRAMES_TO_RESOLVE = 50;
 /*
 * Descripción del cerebro
@@ -61,7 +61,7 @@ class Body extends Rectangle
     draw()
     {
         super.draw();
-        this.valoration++;
+        this.valoration+=5;
     }
 
     forward(before)
@@ -78,46 +78,38 @@ class Body extends Rectangle
 
     up()
     {
-        if (this.vy === 0)
-        {
-            this.vx = 0;
-            this.vy = -SQUARE_WIDTH;
-            this.lastVX = this.vx;
-            this.lastVY = this.vy;
-        }
+        this.valoration++;
+        this.vx = 0;
+        this.vy = -SQUARE_WIDTH;
+        this.lastVX = this.vx;
+        this.lastVY = this.vy;
     }
 
     down()
     {
-        if (this.vy === 0)
-        {
-            this.vx = 0;
-            this.vy = SQUARE_WIDTH;
-            this.lastVX = this.vx;
-            this.lastVY = this.vy;
-        }
+        this.valoration++;
+        this.vx = 0;
+        this.vy = SQUARE_WIDTH;
+        this.lastVX = this.vx;
+        this.lastVY = this.vy;
     }
 
     left()
     {
-        if (this.vx === 0)
-        {
-            this.vy = 0;
-            this.vx = -SQUARE_WIDTH;
-            this.lastVX = this.vx;
-            this.lastVY = this.vy;
-        }
+        this.valoration++;
+        this.vy = 0;
+        this.vx = -SQUARE_WIDTH;
+        this.lastVX = this.vx;
+        this.lastVY = this.vy;
     }
 
     right()
     {
-        if (this.vx === 0)
-        {
-            this.vy = 0;
-            this.vx = SQUARE_WIDTH;
-            this.lastVX = this.vx;
-            this.lastVY = this.vy;
-        }
+        this.valoration++;
+        this.vy = 0;
+        this.vx = SQUARE_WIDTH;
+        this.lastVX = this.vx;
+        this.lastVY = this.vy;
     }
 
     collision(body)
@@ -168,7 +160,7 @@ class Snake
         if(this.framesWithoutGrowl===0)
         {
             this.kill();
-            this.snake[0].valoration-=FRAMES_TO_RESOLVE*2;
+            //this.snake[0].valoration-=FRAMES_TO_RESOLVE*2;
         }
     }
 
@@ -178,7 +170,7 @@ class Snake
         if (head.x < this.x || head.x >= this.x+BOARD_WIDTH || head.y < this.y || head.y >= this.y+BOARD_HEIGHT)
         {
             this.kill();
-            this.snake[0].valoration-=10;
+            //this.snake[0].valoration-=10;
         }
     }
 
@@ -192,7 +184,7 @@ class Snake
         if (this.snake[0].collision(body))
         {
             this.kill();
-            this.snake[0].valoration-=0.1;
+            //this.snake[0].valoration-=10;
         }
     }
 
@@ -209,11 +201,12 @@ class Snake
         return this.snake[0].valoration;
     }
 
-    move(mov)
+    move(mov,fun)
     {
-        let head = this.snake[0];
+        //let head = this.snake[0];
         new Circle(this.x+BOARD_WIDTH-2,this.y+35+4*mov,1,"#ff55a2").draw();
-        switch (mov)
+        fun();
+        /*switch (mov)
         {
             case 0:
                 if(head.vx>0)
@@ -235,12 +228,13 @@ class Snake
                 else if(head.vy<0)
                     head.right();
                 break;
-        }
+        }*/
 
     }
 
     showResults(input, out)
     {
+        let head = this.snake[0];
         out.forEach((e,i)=>
         {
             new Circle(this.x+BOARD_WIDTH-2,this.y+37+4*i,1,"#b6b3a8").draw();
@@ -248,13 +242,17 @@ class Snake
 
         if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0])
         {
-            this.move(0);
+            this.move(0,()=>head.left());
         } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0])
         {
-            this.move(1);
+            this.move(1,()=>head.up());
         } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0])
         {
-            this.move(2);
+            this.move(2,()=>head.right());
+        }
+        else
+        {
+            this.move(3,()=>head.down())
         }
 
         input.forEach((e,i)=>
@@ -362,23 +360,23 @@ class Snake
         if(head.vx>0&&x<fx||head.vx<0&&fx<x)
         {
             toTheXFood = 1;
-            head.valoration+=5;
+            //head.valoration+=5;
         }
         else if(head.vx<0&&x<fx||head.vx>0&&fx<x)
         {
             toTheXFood = -1;
-            head.valoration-=2;
+            //head.valoration--;
         }
 
         if(head.vy>0&&y<fy||head.vy<0&&fy<y)
         {
             toTheYFood = 1;
-            head.valoration+=5;
+            //head.valoration+=5;
         }
         else if(head.vy<0&&y<fy||head.vy>0&&fy<y)
         {
             toTheYFood = -1;
-            head.valoration-=2;
+            //head.valoration--;
         }
 
 
