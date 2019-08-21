@@ -40,6 +40,21 @@ class ReLu
     }
 }
 
+function transpose(x)
+{
+    let t = [];
+    for(let i = 0; i<x[0].length;i++)
+    {
+        r = [];
+        for (let j = 0;j<x.length;j++)
+        {
+            r.push(x[j][i]);
+        }
+        t.push(r);
+    }
+    return t;
+}
+
 function dot(a,b)
 {
     let r = [];
@@ -117,7 +132,7 @@ class NeuronalNetwork
             this.layers.push(new Layer(e,inputs,activationFunction));
             inputs = e;
         });
-        this.layers[this.layers.length-1].activationFunction=new ReLu();
+        //this.layers[this.layers.length-1].activationFunction=new ReLu();
     }
 
     getOutput(x)
@@ -147,3 +162,4 @@ class NeuronalNetwork
         })
     }
 }
+
