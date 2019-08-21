@@ -1,4 +1,4 @@
-const TOPOLOGY = [22,10,10,4];
+const TOPOLOGY = [22,18,10,4];
 const FRAMES_TO_RESOLVE = 50;
 /*
 * Descripción del cerebro
@@ -61,7 +61,7 @@ class Body extends Rectangle
     draw()
     {
         super.draw();
-        this.valoration+=5;
+        this.valoration++;
     }
 
     forward(before)
@@ -160,7 +160,7 @@ class Snake
         if(this.framesWithoutGrowl===0)
         {
             this.kill();
-            //this.snake[0].valoration-=FRAMES_TO_RESOLVE*2;
+            this.snake[0].valoration-=FRAMES_TO_RESOLVE*2;
         }
     }
 
@@ -240,13 +240,13 @@ class Snake
             new Circle(this.x+BOARD_WIDTH-2,this.y+37+4*i,1,"#b6b3a8").draw();
         });
 
-        if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0])
+        if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0] && out[0][0]>= out[3][0])
         {
             this.move(0,()=>head.left());
-        } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0])
+        } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0] && out[1][0]>= out[3][0])
         {
             this.move(1,()=>head.up());
-        } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0])
+        } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0]&& out[2][0]>=out[3][0])
         {
             this.move(2,()=>head.right());
         }
