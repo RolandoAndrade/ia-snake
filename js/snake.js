@@ -1,5 +1,5 @@
-const TOPOLOGY = [18,12,9,4];
-
+const TOPOLOGY = [22,8,4,3];
+const FRAMES_TO_RESOLVE = 50;
 /*
 * Descripción del cerebro
 *
@@ -23,7 +23,19 @@ const TOPOLOGY = [18,12,9,4];
 * 16. Despejado diagonalmente hacia abajo a la derecha
 * 17. Va hacia el x de la fruta
 * 18. Va hacia el y de la fruta
+* 19. Distancia a la pared izq
+* 20. Distancia a la pared der
+* 21. Distancia a la pared arriba
+* 22. Distancia a la pared abajo
+*
+* SALIDAS
+*
+* 1. Izquierda
+* 2. Sigue
+* 3. Derecha
 * */
+
+
 
 class Body extends Rectangle
 {
@@ -49,7 +61,7 @@ class Body extends Rectangle
     draw()
     {
         super.draw();
-        this.valoration+=3;
+        this.valoration++;
     }
 
     forward(before)
@@ -68,7 +80,6 @@ class Body extends Rectangle
     {
         if (this.vy === 0)
         {
-            this.valoration++;
             this.vx = 0;
             this.vy = -SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -80,7 +91,6 @@ class Body extends Rectangle
     {
         if (this.vy === 0)
         {
-            this.valoration++;
             this.vx = 0;
             this.vy = SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -92,7 +102,6 @@ class Body extends Rectangle
     {
         if (this.vx === 0)
         {
-            this.valoration++;
             this.vy = 0;
             this.vx = -SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -104,7 +113,6 @@ class Body extends Rectangle
     {
         if (this.vx === 0)
         {
-            this.valoration++;
             this.vy = 0;
             this.vx = SQUARE_WIDTH;
             this.lastVX = this.vx;
@@ -130,10 +138,11 @@ class Snake
 
     reset(color = "#71ebff")
     {
+        this.framesWithoutGrowl = FRAMES_TO_RESOLVE;
         this.color = color;
         this.snake = [];
         this.alive = true;
-        for (let i = 0; i < 6; i++)
+        for (let i = 0; i < 5; i++)
         {
             this.snake.push(new Body(this.x + 32 - SQUARE_WIDTH * i, this.y + 40, SQUARE_WIDTH, 0, color));
         }
@@ -141,6 +150,7 @@ class Snake
 
     draw(draw = true)
     {
+        this.framesWithoutGrowl--;
         this.snake[0].move();
         for (let i = 0; i < this.snake.length; i++)
         {
@@ -155,6 +165,11 @@ class Snake
             }
         }
         this.outside();
+        if(this.framesWithoutGrowl===0)
+        {
+            this.kill();
+            this.snake[0].valoration-=FRAMES_TO_RESOLVE*2;
+        }
     }
 
     outside()
@@ -163,6 +178,7 @@ class Snake
         if (head.x < this.x || head.x >= this.x+BOARD_WIDTH || head.y < this.y || head.y >= this.y+BOARD_HEIGHT)
         {
             this.kill();
+            this.snake[0].valoration-=10;
         }
     }
 
@@ -176,6 +192,7 @@ class Snake
         if (this.snake[0].collision(body))
         {
             this.kill();
+            this.snake[0].valoration-=0.1;
         }
     }
 
@@ -184,6 +201,7 @@ class Snake
         let last = this.snake[this.snake.length - 1];
         this.snake.push(new Body(last.x - last.vx, last.y - last.vy, last.vx, last.vy, this.color));
         this.snake[0].valoration+=1000;
+        this.framesWithoutGrowl = FRAMES_TO_RESOLVE;
     }
 
     getValoration()
@@ -191,6 +209,63 @@ class Snake
         return this.snake[0].valoration;
     }
 
+    move(mov)
+    {
+        let head = this.snake[0];
+        new Circle(this.x+BOARD_WIDTH-2,this.y+35+4*mov,1,"#ff55a2").draw();
+        switch (mov)
+        {
+            case 0:
+                if(head.vx>0)
+                    head.up();
+                else if(head.vx<0)
+                    head.down();
+                else if(head.vy>0)
+                    head.right();
+                else if(head.vy<0)
+                    head.left();
+                break;
+            case 2:
+                if(head.vx>0)
+                    head.down();
+                else if(head.vx<0)
+                    head.up();
+                else if(head.vy>0)
+                    head.left();
+                else if(head.vy<0)
+                    head.right();
+                break;
+        }
+
+    }
+
+    showResults(input, out)
+    {
+        out.forEach((e,i)=>
+        {
+            new Circle(this.x+BOARD_WIDTH-2,this.y+37+4*i,1,"#b6b3a8").draw();
+        });
+
+        if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0])
+        {
+            this.move(0);
+        } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0])
+        {
+            this.move(1);
+        } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0])
+        {
+            this.move(2);
+        }
+
+        input.forEach((e,i)=>
+        {
+            if(i<18)
+            {
+                new Circle(this.x+2,this.y+5+4*i,1,e?"#ff55a2":"#b6b3a8").draw();
+            }
+
+        })
+    }
 
 
     think(food)
@@ -224,6 +299,12 @@ class Snake
 
         let toTheXFood = 0;
         let toTheYFood = 0;
+
+        let leftDistance = (head.x - this.x)/BOARD_WIDTH;
+        let rightDistance = (this.x+BOARD_WIDTH-head.x)/BOARD_WIDTH;
+        let upDistance = (head.y - this.y)/BOARD_WIDTH;
+        let downDistance = (this.y+BOARD_WIDTH-head.y)/BOARD_WIDTH;
+
 
         this.snake.forEach(e=>
         {
@@ -281,19 +362,23 @@ class Snake
         if(head.vx>0&&x<fx||head.vx<0&&fx<x)
         {
             toTheXFood = 1;
+            head.valoration+=5;
         }
         else if(head.vx<0&&x<fx||head.vx>0&&fx<x)
         {
             toTheXFood = -1;
+            head.valoration-=2;
         }
 
         if(head.vy>0&&y<fy||head.vy<0&&fy<y)
         {
             toTheYFood = 1;
+            head.valoration+=5;
         }
         else if(head.vy<0&&y<fy||head.vy>0&&fy<y)
         {
             toTheYFood = -1;
+            head.valoration-=2;
         }
 
 
@@ -302,39 +387,11 @@ class Snake
             isFoodUpLeft, isFoodUpRight, isFoodDownLeft, isFoodDownRight,
             isClearUp, isClearDown, isClearLeft, isClearRight,
             isClearUpLeft, isClearUpRight, isClearDownLeft, isClearDownRight,
-            toTheXFood, toTheYFood
+            toTheXFood, toTheYFood, leftDistance, rightDistance, upDistance, downDistance
         ];
         let out = this.brain.getOutput([input]);
-
-        out.forEach((e,i)=>
-        {
-            new Circle(this.x+BOARD_WIDTH-2,this.y+35+4*i,1,"#b6b3a8").draw();
-        });
-
-        if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0] && out[0][0] >= out[3][0])
-        {
-            new Circle(this.x+BOARD_WIDTH-2,this.y+35,1,"#ff55a2").draw();
-            head.left();
-        } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0] && out[1][0] >= out[3][0])
-        {
-            new Circle(this.x+BOARD_WIDTH-2,this.y+35+4,1,"#ff55a2").draw();
-            head.right();
-        } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0] && out[2][0] >= out[3][0])
-        {
-            new Circle(this.x+BOARD_WIDTH-2,this.y+35+8,1,"#ff55a2").draw();
-            head.up();
-        } else
-        {
-            new Circle(this.x+BOARD_WIDTH-2,this.y+35+12,1,"#ff55a2").draw();
-            head.down();
-        }
-
-        input.forEach((e,i)=>
-        {
-            new Circle(this.x+2,this.y+5+4*i,1,e?"#ff55a2":"#b6b3a8").draw();
-        })
-
-
-
+        this.showResults(input,out);
     }
+
+
 }

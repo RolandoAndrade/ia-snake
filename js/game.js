@@ -126,4 +126,4 @@ function loop()
     view.loop();
 }
 
-let interval = window.setInterval(loop,100);
+let interval = window.setInterval(loop,50);

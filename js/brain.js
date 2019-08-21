@@ -105,7 +105,7 @@ class Layer
 
 }
 
-const STEP = 0.01;
+const STEP = 0.5;
 
 class NeuronalNetwork
 {
