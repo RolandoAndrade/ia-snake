@@ -1,4 +1,4 @@
-const TOPOLOGY = [14,18,10,4];
+const TOPOLOGY = [22,18,10,3];
 const FRAMES_TO_RESOLVE = 50;
 /*
 * Descripción del cerebro
@@ -201,12 +201,12 @@ class Snake
         return this.snake[0].valoration;
     }
 
-    move(mov,fun)
+    move(mov)
     {
-        //let head = this.snake[0];
+        let head = this.snake[0];
         new Circle(this.x+BOARD_WIDTH-2,this.y+35+4*mov,1,"#ff55a2").draw();
-        fun();
-        /*switch (mov)
+        //fun();
+        switch (mov)
         {
             case 0:
                 if(head.vx>0)
@@ -228,7 +228,7 @@ class Snake
                 else if(head.vy<0)
                     head.right();
                 break;
-        }*/
+        }
 
     }
 
@@ -240,15 +240,15 @@ class Snake
             new Circle(this.x+BOARD_WIDTH-2,this.y+35+4*i,1,"#b6b3a8").draw();
         });
 
-        if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0] && out[0][0]>= out[3][0])
+        if (out[0][0] >= out[1][0] && out[0][0] >= out[2][0] /*&& out[0][0]>= out[3][0]*/)
         {
-            this.move(0,()=>head.left());
-        } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0] && out[1][0]>= out[3][0])
+            this.move(0);
+        } else if (out[1][0] >= out[0][0] && out[1][0] >= out[2][0] /*&& out[1][0]>= out[3][0]*/)
         {
-            this.move(1,()=>head.right());
-        } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0]&& out[2][0]>=out[3][0])
+            this.move(1);
+        } else if (out[2][0] >= out[0][0] && out[2][0] >= out[1][0]/*&& out[2][0]>=out[3][0]*/)
         {
-            this.move(2,()=>head.up());
+            this.move(2);
         }
         else
         {
@@ -382,9 +382,9 @@ class Snake
 
         let input = [
             isFoodOver, isFoodUnder, isFoodAtLeft, isFoodAtRight,
-            //isFoodUpLeft, isFoodUpRight, isFoodDownLeft, isFoodDownRight,
+            isFoodUpLeft, isFoodUpRight, isFoodDownLeft, isFoodDownRight,
             isClearUp, isClearDown, isClearLeft, isClearRight,
-            //isClearUpLeft, isClearUpRight, isClearDownLeft, isClearDownRight,
+            isClearUpLeft, isClearUpRight, isClearDownLeft, isClearDownRight,
             toTheXFood, toTheYFood, leftDistance, rightDistance, upDistance, downDistance
         ];
 
