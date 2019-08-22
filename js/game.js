@@ -12,6 +12,7 @@ let numberBoard = 0;
 let average = 0;
 let avg = document.getElementById("average");
 let max = document.getElementById("maxi");
+let gen = document.getElementById("generation");
 let maxi = 0;
 
 class Board
@@ -87,6 +88,7 @@ class View
         average/=POPULATION;
         avg.innerHTML = "Promedio: "+average;
         max.innerHTML = "Máximo: "+maxi;
+        gen.innerHTML = "Generación: "+this.family.generation;
     }
 
     loop()
@@ -136,5 +138,16 @@ function loop()
 
     view.loop();
 }
+
+const NAMES =[
+    "Larry", "Skylar", "Steven", "Jetzy", "John", "Betty", "Victoria", "Daniel", "Rufus", "Bingo",
+    "Barry", "Bianca", "Vanessa", "Perry", "Slither", "Snaky", "Trip", "Sophie", "Stephanie", "Peter",
+    "Raul", "Rebbecca", "Diance", "Robert", "Serena", "Gold", "May", "Teressa", "Sergio", "Jorge",
+    "Barack", "Michael", "Taylor", "Selena", "Pink", "Daisy", "Stuart", "Miguel", "Blue", "Manuel",
+    "Marine", "Sergey", "Adrien", "Leonardo", "Samuel", "Rock", "Snape", "Harry", "Barbara", "Selena",
+    "Misty", "Celeste", "Alex", "Yuri", "Babsy", "Seviper", "Servine", "Serperior", "Snivy", "Constrictor",
+    "Fasty", "Julian", "Large", "Groot", "Santy", "Bitter", "Mickey", "Luz", "Chiara", "Cece",
+    "Beatriz", "Alicia", "Blanca", "Rose", "Fracis", "Diego", "Fefi", "Tete", "Slowy", "Ready"
+]
 
 let interval = window.setInterval(loop,50);

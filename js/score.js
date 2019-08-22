@@ -59,8 +59,10 @@ class Score
         ctx.fillText(""+this.score,this.x,this.y);
         ctx.font ='8px Arial, sans-serif';
         ctx.fillText("Rolando Andrade",this.x,this.y+15);
+        ctx.font ='7px Arial, sans-serif';
+        ctx.fillText(this.number+"",this.x,this.y-30);
         ctx.font ='10px Arial, sans-serif';
-        ctx.fillText(this.number+"",this.x,this.y-40);
+        ctx.fillText(NAMES[this.number],this.x,this.y-40);
     }
 
     add()
