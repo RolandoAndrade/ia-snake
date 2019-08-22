@@ -1,6 +1,6 @@
-const SURVIVOR_RATE = 0.2;
+const SURVIVOR_RATE = 0.15;
 const POPULATION = 80;
-const MUTATION_RATE = 0.4;
+const MUTATION_RATE = 0.3;
 const REPRODUCE_RATE = 0.10;
 function cloneObject(src)
 {
