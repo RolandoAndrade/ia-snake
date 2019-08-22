@@ -77,7 +77,6 @@ class Body extends Rectangle
 
     up()
     {
-        this.valoration--;
         this.vx = 0;
         this.vy = -SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -86,7 +85,6 @@ class Body extends Rectangle
 
     down()
     {
-        this.valoration--;
         this.vx = 0;
         this.vy = SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -95,7 +93,6 @@ class Body extends Rectangle
 
     left()
     {
-        this.valoration--;
         this.vy = 0;
         this.vx = -SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -104,7 +101,6 @@ class Body extends Rectangle
 
     right()
     {
-        this.valoration--;
         this.vy = 0;
         this.vx = SQUARE_WIDTH;
         this.lastVX = this.vx;
