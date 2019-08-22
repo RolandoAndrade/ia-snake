@@ -105,7 +105,7 @@ class Layer
             let weights = [];
             for(let j = 0; j < numberOfInputs;j++)
             {
-                weights.push(Math.random()*100-50);
+                weights.push(Math.random()*2-1);
             }
             this.W.push(weights);
             this.b.push([1]);
@@ -132,7 +132,7 @@ class NeuronalNetwork
             this.layers.push(new Layer(e,inputs,activationFunction));
             inputs = e;
         });
-        //this.layers[this.layers.length-1].activationFunction=new ReLu();
+        this.layers[this.layers.length-1].activationFunction=new ReLu();
     }
 
     getOutput(x)

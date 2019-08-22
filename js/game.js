@@ -9,6 +9,10 @@ const WIDTH = 800;
 const HEIGHT = 640;
 
 let numberBoard = 0;
+let average = 0;
+let avg = document.getElementById("average");
+let max = document.getElementById("maxi");
+let maxi = 0;
 
 class Board
 {
@@ -43,6 +47,8 @@ class Board
 
     reset()
     {
+        average+=this.score.score;
+        maxi = Math.max(maxi, this.score.score);
         this.score.score = 0;
         this.gameOver = false;
         this.food = new Food(this.snake, this.x, this.y);
@@ -75,7 +81,12 @@ class View
     {
         this.family.nextGeneration();
         this.finished = false;
+        average = 0;
+        maxi = 0;
         this.boards.forEach(e=>e.reset());
+        average/=POPULATION;
+        avg.innerHTML = "Promedio: "+average;
+        max.innerHTML = "Máximo: "+maxi;
     }
 
     loop()

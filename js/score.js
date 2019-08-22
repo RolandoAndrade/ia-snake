@@ -7,7 +7,7 @@ class Food extends Rectangle
         this.ly = y;
         this.x = x + 60;
         this.y = y + 60;
-        this.generate(snake);
+        //this.generate(snake);
     }
 
     generate(snaky)

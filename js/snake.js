@@ -61,7 +61,6 @@ class Body extends Rectangle
     draw()
     {
         super.draw();
-        this.valoration++;
     }
 
     forward(before)
@@ -78,7 +77,6 @@ class Body extends Rectangle
 
     up()
     {
-        this.valoration++;
         this.vx = 0;
         this.vy = -SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -87,7 +85,6 @@ class Body extends Rectangle
 
     down()
     {
-        this.valoration++;
         this.vx = 0;
         this.vy = SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -96,7 +93,6 @@ class Body extends Rectangle
 
     left()
     {
-        this.valoration++;
         this.vy = 0;
         this.vx = -SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -105,7 +101,6 @@ class Body extends Rectangle
 
     right()
     {
-        this.valoration++;
         this.vy = 0;
         this.vx = SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -170,7 +165,7 @@ class Snake
         if (head.x < this.x || head.x >= this.x+BOARD_WIDTH || head.y < this.y || head.y >= this.y+BOARD_HEIGHT)
         {
             this.kill();
-            //this.snake[0].valoration-=10;
+            this.snake[0].valoration-=2;
         }
     }
 
@@ -184,7 +179,7 @@ class Snake
         if (this.snake[0].collision(body))
         {
             this.kill();
-            //this.snake[0].valoration-=10;
+            this.snake[0].valoration--;
         }
     }
 
@@ -360,23 +355,23 @@ class Snake
         if(head.vx>0&&x<fx||head.vx<0&&fx<x)
         {
             toTheXFood = 1;
-            //head.valoration+=5;
+            head.valoration+=5;
         }
         else if(head.vx<0&&x<fx||head.vx>0&&fx<x)
         {
             toTheXFood = -1;
-            //head.valoration--;
+            head.valoration--;
         }
 
         if(head.vy>0&&y<fy||head.vy<0&&fy<y)
         {
             toTheYFood = 1;
-            //head.valoration+=5;
+            head.valoration+=5;
         }
         else if(head.vy<0&&y<fy||head.vy>0&&fy<y)
         {
             toTheYFood = -1;
-            //head.valoration--;
+            head.valoration--;
         }
 
 
