@@ -150,4 +150,4 @@ const NAMES =[
     "Beatriz", "Alicia", "Blanca", "Rose", "Fracis", "Diego", "Fefi", "Tete", "Slowy", "Ready"
 ]
 
-let interval = window.setInterval(loop,50);
+let interval = window.setInterval(loop,10);

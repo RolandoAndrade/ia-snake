@@ -77,6 +77,7 @@ class Body extends Rectangle
 
     up()
     {
+        this.valoration--;
         this.vx = 0;
         this.vy = -SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -85,6 +86,7 @@ class Body extends Rectangle
 
     down()
     {
+        this.valoration--;
         this.vx = 0;
         this.vy = SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -93,6 +95,7 @@ class Body extends Rectangle
 
     left()
     {
+        this.valoration--;
         this.vy = 0;
         this.vx = -SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -101,6 +104,7 @@ class Body extends Rectangle
 
     right()
     {
+        this.valoration--;
         this.vy = 0;
         this.vx = SQUARE_WIDTH;
         this.lastVX = this.vx;
@@ -155,7 +159,6 @@ class Snake
         if(this.framesWithoutGrowl===0)
         {
             this.kill();
-            this.snake[0].valoration-=FRAMES_TO_RESOLVE*2;
         }
     }
 
@@ -165,7 +168,7 @@ class Snake
         if (head.x < this.x || head.x >= this.x+BOARD_WIDTH || head.y < this.y || head.y >= this.y+BOARD_HEIGHT)
         {
             this.kill();
-            this.snake[0].valoration-=2;
+            this.snake[0].valoration-=5;
         }
     }
 
@@ -187,7 +190,7 @@ class Snake
     {
         let last = this.snake[this.snake.length - 1];
         this.snake.push(new Body(last.x - last.vx, last.y - last.vy, last.vx, last.vy, this.color));
-        this.snake[0].valoration+=1000;
+        this.snake[0].valoration+= this.framesWithoutGrowl*2;
         this.framesWithoutGrowl = FRAMES_TO_RESOLVE;
     }
 

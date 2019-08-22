@@ -1,7 +1,7 @@
 const SURVIVOR_RATE = 0.2;
 const POPULATION = 80;
-const MUTATION_RATE = 0.2;
-
+const MUTATION_RATE = 0.4;
+const REPRODUCE_RATE = 0.10;
 function cloneObject(src)
 {
     return JSON.parse(JSON.stringify(src));
@@ -15,6 +15,7 @@ class Generation
     {
         this.generation = 1;
         this.SURVIVORS = SURVIVOR_RATE*POPULATION;
+        this.TO_REPRODUCE = REPRODUCE_RATE*POPULATION;
         this.boards = boards;
     }
 
@@ -28,15 +29,23 @@ class Generation
     {
         let baby = new Snake();
         let brain = new NeuronalNetwork(TOPOLOGY,new Sigmoid());
-        let father = this.boards[Math.floor(Math.random() * this.SURVIVORS)].snake;
-        let mother = this.boards[Math.floor(Math.random() * this.SURVIVORS)].snake;
+        let father = this.boards[Math.floor(Math.random() * this.TO_REPRODUCE)].snake;
+        let mother = this.boards[Math.floor(Math.random() * this.TO_REPRODUCE)].snake;
         let layers = [];
+
         father.brain.layers.forEach(e=>
         {
-            layers.push(cloneObject(e));
+            let layer = new Layer(0,0,e.activationFunction);
+            let data = cloneObject(e);
+            layer.W = data.W;
+            layer.b = data.b;
+            layers.push(layer);
         });
+
         layers.forEach((l,i)=>
         {
+
+
             l.W.forEach((r,j)=>
             {
                r.forEach((c,k)=>
@@ -49,10 +58,10 @@ class Generation
             l.b.forEach((r,j)=>
             {
                 if(Math.random()<0.5)
-                    layers[i].b[j]=mother.brain.layers[i].b[j];
+                    layers[i].b[j][0]=mother.brain.layers[i].b[j][0];
             });
         });
-        baby.brain.layers = layers;
+        brain.layers = layers;
         baby.brain = this.mutate(brain);
         return baby;
     }
@@ -83,6 +92,10 @@ class Generation
             if(i===0)
             {
                 e.snake.reset("#eeff7c");
+            }
+            else if(i<this.TO_REPRODUCE)
+            {
+                e.snake.reset("#f684ff")
             }
             else if(i<this.SURVIVORS)
             {
